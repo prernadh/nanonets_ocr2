@@ -1,5 +1,8 @@
 # Nanonets-OCR2 for FiftyOne
 
+![Nanonets-OCR2 Demo](nanonet_ocr.gif)
+
+
 A FiftyOne Zoo Model integration for [Nanonets-OCR2](https://huggingface.co/nanonets/Nanonets-OCR2-3B), a powerful vision-language model that transforms documents into structured markdown with intelligent content recognition and semantic tagging.
 
 ## Features
