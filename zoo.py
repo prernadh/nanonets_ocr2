@@ -136,13 +136,13 @@ class NanoNetsOCR(Model, SamplesMixin):
         prompt = self._custom_prompt if self._custom_prompt else DEFAULT_PROMPT
         
         # Get the image path from the sample
-        # image_path = sample.filepath if sample else "temp_image.jpg"
+        image_path = sample.filepath if sample else "temp_image.jpg"
         
         # Prepare messages in the chat format
         messages = [
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": [
-                {"type": "image", "image": image},
+                {"type": "image", "image": f"file://{image_path}"},
                 {"type": "text", "text": prompt},
             ]},
         ]
