@@ -24,29 +24,6 @@
                     "support": true
                 }
             }
-        },
-        {
-            "base_name": "nanonets/Nanonets-OCR2-1.5B-exp",
-            "base_filename":"Nanonets-OCR2-1.5B-exp",
-            "author": "Nanonets",
-            "license": "Apache 2.0",
-            "source": "https://huggingface.co/nanonets/Nanonets-OCR2-1.5B-exp",
-            "description": "Nanonets-OCR2 are image-to-markdown OCR models that go far beyond traditional text extraction. It transforms documents into structured markdown with intelligent content recognition and semantic tagging, making it ideal for downstream processing by Large Language Models (LLMs).",
-            "tags": [
-                "detection",
-                "ocr",
-                "VLM"
-            ],
-            "date_added": "2025-10-23",
-            "requirements": {
-                "packages": ["huggingface-hub", "transformers", "torch", "torchvision"],
-                "cpu": {
-                    "support": true
-                },
-                "gpu": {
-                    "support": true
-                }
-            }
         }
     ]
 }
