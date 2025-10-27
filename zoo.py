@@ -12,12 +12,17 @@ import torch
 import fiftyone as fo
 from fiftyone import Model, SamplesMixin
 
-from transformers import AutoTokenizer, AutoProcessor, AutoModelForImageTextToText
+from transformers import AutoTokenizer, AutoProcessor, AutoModelForImageTextToText, BitsAndBytesConfig
 from transformers.utils import is_flash_attn_2_available
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_PROMPT = """Extract the text from the above document as if you were reading it naturally. Return the tables in html format. Return the equations in LaTeX representation. If there is an image in the document and image caption is not present, add a small description of the image inside the <img></img> tag; otherwise, add the image caption inside <img></img>. Watermarks should be wrapped in brackets. Ex: <watermark>OFFICIAL COPY</watermark>. Page numbers should be wrapped in brackets. Ex: <page_number>14</page_number> or <page_number>9/22</page_number>. Prefer using ☐ and ☑ for check boxes."""
+
+quantization_config = BitsAndBytesConfig(
+    load_in_8bit=True,
+    llm_int8_enable_fp32_cpu_offload=True
+)
 
 @contextmanager
 def suppress_output():
@@ -104,8 +109,9 @@ class NanoNetsOCR(Model, SamplesMixin):
         self.processor = AutoProcessor.from_pretrained(model_path)
         
         model_kwargs = {
-            "torch_dtype": "auto",
+            "torch_dtype": self.dtype,
             "device_map": "auto",
+            "quantization_config": quantization_config,
         }
         
         if is_flash_attn_2_available():
@@ -148,7 +154,7 @@ class NanoNetsOCR(Model, SamplesMixin):
         ]
         
         # Run inference with suppressed output
-        with suppress_output():
+        with suppress_output(), torch.no_grad():
             # Apply chat template
             text = self.processor.apply_chat_template(
                 messages, 
@@ -186,7 +192,9 @@ class NanoNetsOCR(Model, SamplesMixin):
             )
             
             result = output_text[0]
-        
+        if self.device == "cuda":
+            torch.cuda.empty_cache()
+            
         return result
     
     def predict(self, image, sample=None):
