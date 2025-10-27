@@ -38,7 +38,7 @@ dataset = load_from_hub("Voxel51/scanned_receipts", max_samples=200)
 
 # Register the model source
 foz.register_zoo_model_source(
-    "https://github.com/harpreetsahota204/nanonets_ocr2",
+    "https://github.com/prernadh/nanonets_ocr2",
     overwrite=True
 )
 
