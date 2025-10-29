@@ -17,7 +17,18 @@ from transformers.utils import is_flash_attn_2_available
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_PROMPT = """Extract the text from the above document as if you were reading it naturally. Return the tables in html format. Return the equations in LaTeX representation. If there is an image in the document and image caption is not present, add a small description of the image inside the <img></img> tag; otherwise, add the image caption inside <img></img>. Watermarks should be wrapped in brackets. Ex: <watermark>OFFICIAL COPY</watermark>. Page numbers should be wrapped in brackets. Ex: <page_number>14</page_number> or <page_number>9/22</page_number>. Prefer using ☐ and ☑ for check boxes."""
+DEFAULT_PROMPT = """Extract the text from the above document as if you were
+                 reading it naturally. Return the tables in html format. Return
+                 the equations in LaTeX representation. For images in the document 
+                 add a thorough 3 sentence description of the image inside a
+                 <img></img> tag. If there is an image caption, add the image caption inside
+                 <img_caption></img_caption> tag right after the description of
+                 the image. Watermarks should be
+                 wrapped in brackets. Ex: <watermark>OFFICIAL COPY</watermark>.
+                 Page numbers should be wrapped in brackets. Ex:
+                 <page_number>14</page_number> or
+                 <page_number>9/22</page_number>. Prefer using ☐ and ☑ for check
+                 boxes."""
 
 quantization_config = BitsAndBytesConfig(
     load_in_8bit=True,
@@ -78,7 +89,7 @@ class NanoNetsOCR(Model, SamplesMixin):
         self,
         model_path: str = "nanonets/Nanonets-OCR2-3B",
         custom_prompt: str = None,
-        max_new_tokens: int = 15000,
+        max_new_tokens: int = 7000,
         torch_dtype: torch.dtype = None,
         **kwargs
     ):
@@ -194,7 +205,7 @@ class NanoNetsOCR(Model, SamplesMixin):
             result = output_text[0]
         if self.device == "cuda":
             torch.cuda.empty_cache()
-            
+
         return result
     
     def predict(self, image, sample=None):
