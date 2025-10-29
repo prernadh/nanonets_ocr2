@@ -78,7 +78,7 @@ class NanoNetsOCR(Model, SamplesMixin):
         self,
         model_path: str = "nanonets/Nanonets-OCR2-3B",
         custom_prompt: str = None,
-        max_new_tokens: int = 7000,
+        max_new_tokens: int = 15000,
         torch_dtype: torch.dtype = None,
         **kwargs
     ):
